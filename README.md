@@ -1,4 +1,4 @@
-<h1>Programme Moprpion</h1>
+<h1>Programme Morpion</h1>
 
 <hr />
 
