@@ -1,4 +1,3 @@
-
 """
 Coder par ZedRoff et TheHeroFiction en 2021.
 Projet NSI.
@@ -13,139 +12,256 @@ import random
 
 # Init
 
-win = Tk()
+window = Tk()
 main_color = "#0B243B"
 version = "1.0.0"
 
-win.configure(bg=main_color)
-win.title("Morpion {}".format(version))
-win.minsize(500, 500)
+window.configure(bg=main_color)
+window.title("Morpion {}".format(version))
+window.minsize(500, 500)
 
 # Body
 
-frame1 = Frame(win,bg="#0B0B61")
-frame1.pack(side=TOP, fill='x')
+frame_top = Frame(window, bg="#0B0B61")
+frame_top.pack(side=TOP, fill="x")
 
-title = Label(frame1, text="Morpion", bd="5", relief=SUNKEN, font="Verdana 25 bold", fg="white", bg=main_color)
-title.pack(pady=25)
+frame_top_title = Label(
+    frame_top,
+    text="Morpion",
+    bd="5",
+    relief=SUNKEN,
+    font="Verdana 25 bold",
+    fg="white",
+    bg=main_color,
+)
+frame_top_title.pack(pady=25)
 
-hr = Frame(frame1, bg="white", width="450px", height="5px")
-hr.pack(pady=25)
-
-
-frame4 = Frame(win, bg="red", width=650,height=50)
-lbl = Label(frame4, text="X : 0", fg="black")
-lbl.place(x=50)
-lbl2 = Label(frame4, text="O : 0", fg="black")
-lbl2.place(x=600)
-frame4.pack()
-frame2 = Frame(win,bg=main_color)
-frame2.pack(side=BOTTOM, fill='x')
-frame3 = Frame(win, bg="red")
-
-w_btn = 5
-h_btn = 5
-c_btn = main_color
+separator = Frame(frame_top, bg="white", width="450px", height="5px")
+separator.pack(pady=25)
 
 
-turn = random.randint(0,1)
+frame_middle = Frame(window, bg="red", width=650, height=50)
+frame_middle_label_left = Label(frame_middle, text="X : 0", fg="black")
+frame_middle_label_left.place(x=50)
+frame_middle_label_right = Label(frame_middle, text="O : 0", fg="black")
+frame_middle_label_right.place(x=600)
+frame_middle.pack()
+frame_bottom = Frame(window, bg=main_color)
+frame_bottom.pack(side=BOTTOM, fill="x")
 
-tab = [[0,0,0],[0,0,0],[0,0,0]]
+table = Frame(window, bg="red")
 
-g = []
-b1, b2, b3, b4, b5, b6, b7, b8, b9, b10 = Button(frame3, width=w_btn, height=h_btn, bg=c_btn, activebackground=main_color,fg="white", command=lambda: click(0,0)),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(0,1), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(0,2), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(1,0), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(1,1), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(1,2), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(2,0), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(2,1), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(2,2), activebackground=main_color),Button(frame2, width=1, height=1, bg=c_btn, highlightthickness=0,bd=0)
-b1.grid(row=0, column=0)
-b2.grid(row=0, column=1)
-b3.grid(row=0, column=2)
-b4.grid(row=1, column=0, pady=5)
-b5.grid(row=1, column=1)
-b6.grid(row=1, column=2)
-b7.grid(row=2,column=0)
-b8.grid(row=2, column=1, padx=5)
-b9.grid(row=2, column=2)
-b10.grid(row=2, column=2)
+width_button = 5
+height_button = 5
+color_button = main_color
 
-g.append([[b1, b2, b3], [b4, b5, b6], [b7, b8, b9]])
+
+turn = random.randint(0, 1)
+
+virtual_board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+
+button_storage = []
+
+(
+    button_1,
+    button_2,
+    button_3,
+    button_4,
+    button_5,
+    button_6,
+    button_7,
+    button_8,
+    button_9,
+    button_easter,
+) = (
+    Button(
+        table,
+        width=width_button,
+        height=height_button,
+        bg=color_button,
+        activebackground=main_color,
+        command=lambda: click(0, 0),
+    ),
+    Button(
+        table,
+        width=width_button,
+        height=height_button,
+        bg=color_button,
+        command=lambda: click(0, 1),
+        activebackground=main_color,
+    ),
+    Button(
+        table,
+        width=width_button,
+        height=height_button,
+        bg=color_button,
+        command=lambda: click(0, 2),
+        activebackground=main_color,
+    ),
+    Button(
+        table,
+        width=width_button,
+        height=height_button,
+        bg=color_button,
+        command=lambda: click(1, 0),
+        activebackground=main_color,
+    ),
+    Button(
+        table,
+        width=width_button,
+        height=height_button,
+        bg=color_button,
+        command=lambda: click(1, 1),
+        activebackground=main_color,
+    ),
+    Button(
+        table,
+        width=width_button,
+        height=height_button,
+        bg=color_button,
+        command=lambda: click(1, 2),
+        activebackground=main_color,
+    ),
+    Button(
+        table,
+        width=width_button,
+        height=height_button,
+        bg=color_button,
+        command=lambda: click(2, 0),
+        activebackground=main_color,
+    ),
+    Button(
+        table,
+        width=width_button,
+        height=height_button,
+        bg=color_button,
+        command=lambda: click(2, 1),
+        activebackground=main_color,
+    ),
+    Button(
+        table,
+        width=width_button,
+        height=height_button,
+        bg=color_button,
+        command=lambda: click(2, 2),
+        activebackground=main_color,
+    ),
+    Button(
+        frame_bottom, width=1, height=1, bg=color_button, highlightthickness=0, bd=0
+    ),
+)
+
+button_1.grid(row=0, column=0)
+button_2.grid(row=0, column=1)
+button_3.grid(row=0, column=2)
+button_4.grid(row=1, column=0, pady=5)
+button_5.grid(row=1, column=1)
+button_6.grid(row=1, column=2)
+button_7.grid(row=2, column=0)
+button_8.grid(row=2, column=1, padx=5)
+button_9.grid(row=2, column=2)
+button_easter.grid(row=2, column=2)
+
+button_storage.append(
+    [
+        [button_1, button_2, button_3],
+        [button_4, button_5, button_6],
+        [button_7, button_8, button_9],
+    ]
+)
 
 
 score_o = 0
 score_x = 0
+
+
 def checker(c):
-    global tab, g, score_o, score_x
+    global virtual_board, button_storage, score_o, score_x
     if c == 0:
         print()
         print("O won.")
-        tab = [[0,0,0], [0,0,0], [0,0,0]]
-        score_o+=1
-        lbl2["text"] = "O : {}".format(score_o)
-        for i in range(len(g)):
-            for j in range(len(g[i])):
-                for k in range(len(g[i][j])):
-                    
-                    g[i][j][k]["text"] = ""
+        virtual_board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        score_o = 1
+        frame_middle_label_right["text"] = "O : {}".format(score_o)
+        for i in range(len(button_storage)):
+            for j in range(len(button_storage[i])):
+                for k in range(len(button_storage[i][j])):
+
+                    button_storage[i][j][k]["text"] = ""
     elif c == 1:
         print()
         print("X won.")
-        tab = [[0,0,0], [0,0,0], [0,0,0]]
-        score_x+=1
-        lbl["text"] = "X : {}".format(score_x)
-        for i in range(len(g)):
-            for j in range(len(g[i])):
-                for k in range(len(g[i][j])):
-                    
-                    g[i][j][k]["text"] = ""
+        virtual_board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        score_x = 1
+        frame_middle_label_left["text"] = "X : {}".format(score_x)
+        for i in range(len(button_storage)):
+            for j in range(len(button_storage[i])):
+                for k in range(len(button_storage[i][j])):
+
+                    button_storage[i][j][k]["text"] = ""
     else:
         pass
 
-def verif(arr, changer):
-    if arr[0][0] == arr[1][1] == arr[2][2]  != 0:
-        checker(changer)
-    
-    elif arr[2][0] == arr[1][1] == arr[0][2] != 0:
-        checker(changer)
-  
-    elif arr[0][0] == arr[0][1] == arr[0][2] != 0:
-        checker(changer)
-  
-    elif arr[1][0] == arr[1][1] == arr[1][2] != 0:
-        checker(changer)
-  
-    elif arr[2][0] == arr[2][1] == arr[2][2] != 0:
-        checker(changer)
-      
-    elif arr[0][0] == arr[1][0] == arr[2][0] != 0:
-        checker(changer)
-       
-    elif arr[0][1] == arr[1][1] == arr[2][1] != 0:
-        checker(changer)
-   
-    elif arr[0][2] == arr[1][2] == arr[2][2] != 0:
-        checker(changer)
-        
+
+def verification_win(board, winner):
+    if board[0][0] == board[1][1] == board[2][2] != 0:
+        checker(winner)
+
+    elif board[2][0] == board[1][1] == board[0][2] != 0:
+        checker(winner)
+
+    elif board[0][0] == board[0][1] == board[0][2] != 0:
+        checker(winner)
+
+    elif board[1][0] == board[1][1] == board[1][2] != 0:
+        checker(winner)
+
+    elif board[2][0] == board[2][1] == board[2][2] != 0:
+        checker(winner)
+
+    elif board[0][0] == board[1][0] == board[2][0] != 0:
+        checker(winner)
+
+    elif board[0][1] == board[1][1] == board[2][1] != 0:
+        checker(winner)
+
+    elif board[0][2] == board[1][2] == board[2][2] != 0:
+        checker(winner)
+
     else:
         pass
+
 
 def click(x, y):
     global turn
     if turn == 0:
-        tab[x][y] = "X"
-        turn=1
-  
-        g[0][x][y]["text"] = "X"
-        g[0][x][y]["fg"] = "white"
-        verif(tab, turn)
-       
+        virtual_board[x][y] = "X"
+        turn = 1
+
+        button_storage[0][x][y]["text"] = "X"
+        button_storage[0][x][y]["fg"] = "white"
+        verification_win(virtual_board, turn)
+
     else:
-        tab[x][y] = "O"
-        turn=0
-  
-        g[0][x][y]["text"] = "O"
-        g[0][x][y]["fg"] = "white"
-        verif(tab, turn)
-b10.bind("<Button-1>", func=lambda rien: messagebox.showinfo("Easter Egg", "Vous avez trouvé le boutton caché o_O"))
-b10.bind("<Enter>", func=lambda rien: b10.config(activeButton=main_color))
-frame3.pack(expand=1)
+        virtual_board[x][y] = "O"
+        turn = 0
+
+        button_storage[0][x][y]["text"] = "O"
+        button_storage[0][x][y]["fg"] = "white"
+        verification_win(virtual_board, turn)
+
+
+button_easter.bind(
+    "<Button-1>",
+    func=lambda rien: messagebox.showinfo(
+        "Easter Egg", "Vous avez trouvé le boutton caché o_O"
+    ),
+)
+button_easter.bind(
+    "<Enter>", func=lambda rien: button_easter.config(activebackground=main_color)
+)
+table.pack(expand=1)
 
 # Shower
 
-win.mainloop()
+window.mainloop()
