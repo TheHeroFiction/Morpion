@@ -1,11 +1,9 @@
 
 """
-
 Coder par ZedRoff et TheHeroFiction en 2021.
 Projet NSI.
 Version 1.0.0
 Tous droits réservés
-
 """
 
 # Modules
@@ -42,7 +40,7 @@ w_btn = 5
 h_btn = 5
 c_btn = main_color
 
-color_modif = "#00FFFF" #cyan
+
 turn = random.randint(0,1)
 print(turn)
 tab = [[0,0,0],[0,0,0],[0,0,0]]
@@ -62,20 +60,69 @@ b10.grid(row=2, column=2)
 
 g.append([[b1, b2, b3], [b4, b5, b6], [b7, b8, b9]])
 print(g[0][0][0])
+
+
+def checker(c):
+    global tab, g
+    if c == 0:
+        print()
+        print("O won.")
+        tab = [[0,0,0], [0,0,0], [0,0,0]]
+        for i in range(len(g)):
+            for j in range(len(len(g[i]))):
+                print(g[i][j])
+    elif c == 1:
+        print()
+        print("X won.")
+        tab = [[0,0,0], [0,0,0], [0,0,0]]
+    else:
+        pass
+
+def verif(arr, changer):
+    if arr[0][0] == arr[1][1] == arr[2][2]  != 0:
+        checker(changer)
+    
+    elif arr[2][0] == arr[1][1] == arr[0][2] != 0:
+        checker(changer)
+  
+    elif arr[0][0] == arr[0][1] == arr[0][2] != 0:
+        checker(changer)
+  
+    elif arr[1][0] == arr[1][1] == arr[1][2] != 0:
+        checker(changer)
+  
+    elif arr[2][0] == arr[2][1] == arr[2][2] != 0:
+        checker(changer)
+      
+    elif arr[0][0] == arr[1][0] == arr[2][0] != 0:
+        checker(changer)
+       
+    elif arr[0][1] == arr[1][1] == arr[2][1] != 0:
+        checker(changer)
+   
+    elif arr[0][2] == arr[1][2] == arr[2][2] != 0:
+        checker(changer)
+        
+    else:
+        pass
+
 def click(x, y):
     global turn
     if turn == 0:
         tab[x][y] = "X"
         turn=1
-        g[0][x][y]["bg"] = color_modif
+  
         g[0][x][y]["text"] = "X"
         g[0][x][y]["fg"] = "white"
+        verif(tab, turn)
+        print(tab)
     else:
         tab[x][y] = "O"
         turn=0
-        g[0][x][y]["bg"] = color_modif
+  
         g[0][x][y]["text"] = "O"
         g[0][x][y]["fg"] = "white"
+        verif(tab, turn)
 b10.bind("<Button-1>", func=lambda rien: messagebox.showinfo("Easter Egg", "Vous avez trouvé le boutton caché o_O"))
 b10.bind("<Enter>", func=lambda rien: b10.config(activeButton=main_color))
 frame3.pack(expand=1)
