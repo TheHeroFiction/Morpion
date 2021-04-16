@@ -32,6 +32,13 @@ title.pack(pady=25)
 hr = Frame(frame1, bg="white", width="450px", height="5px")
 hr.pack(pady=25)
 
+
+frame4 = Frame(win, bg="red", width=650,height=50)
+lbl = Label(frame4, text="X : 0", fg="black")
+lbl.place(x=50)
+lbl2 = Label(frame4, text="O : 0", fg="black")
+lbl2.place(x=600)
+frame4.pack()
 frame2 = Frame(win,bg=main_color)
 frame2.pack(side=BOTTOM, fill='x')
 frame3 = Frame(win, bg="red")
@@ -42,11 +49,11 @@ c_btn = main_color
 
 
 turn = random.randint(0,1)
-print(turn)
+
 tab = [[0,0,0],[0,0,0],[0,0,0]]
 
 g = []
-b1, b2, b3, b4, b5, b6, b7, b8, b9, b10 = Button(frame3, width=w_btn, height=h_btn, bg=c_btn, activebackground=main_color, command=lambda: click(0,0)),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(0,1), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(0,2), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(1,0), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(1,1), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(1,2), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(2,0), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(2,1), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(2,2), activebackground=main_color),Button(frame2, width=1, height=1, bg=c_btn, highlightthickness=0,bd=0)
+b1, b2, b3, b4, b5, b6, b7, b8, b9, b10 = Button(frame3, width=w_btn, height=h_btn, bg=c_btn, activebackground=main_color,fg="white", command=lambda: click(0,0)),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(0,1), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(0,2), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(1,0), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(1,1), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(1,2), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(2,0), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(2,1), activebackground=main_color),Button(frame3, width=w_btn, height=h_btn, bg=c_btn, command=lambda: click(2,2), activebackground=main_color),Button(frame2, width=1, height=1, bg=c_btn, highlightthickness=0,bd=0)
 b1.grid(row=0, column=0)
 b2.grid(row=0, column=1)
 b3.grid(row=0, column=2)
@@ -59,22 +66,34 @@ b9.grid(row=2, column=2)
 b10.grid(row=2, column=2)
 
 g.append([[b1, b2, b3], [b4, b5, b6], [b7, b8, b9]])
-print(g[0][0][0])
 
 
+score_o = 0
+score_x = 0
 def checker(c):
-    global tab, g
+    global tab, g, score_o, score_x
     if c == 0:
         print()
         print("O won.")
         tab = [[0,0,0], [0,0,0], [0,0,0]]
+        score_o+=1
+        lbl2["text"] = "O : {}".format(score_o)
         for i in range(len(g)):
-            for j in range(len(len(g[i]))):
-                print(g[i][j])
+            for j in range(len(g[i])):
+                for k in range(len(g[i][j])):
+                    
+                    g[i][j][k]["text"] = ""
     elif c == 1:
         print()
         print("X won.")
         tab = [[0,0,0], [0,0,0], [0,0,0]]
+        score_x+=1
+        lbl["text"] = "X : {}".format(score_x)
+        for i in range(len(g)):
+            for j in range(len(g[i])):
+                for k in range(len(g[i][j])):
+                    
+                    g[i][j][k]["text"] = ""
     else:
         pass
 
@@ -115,7 +134,7 @@ def click(x, y):
         g[0][x][y]["text"] = "X"
         g[0][x][y]["fg"] = "white"
         verif(tab, turn)
-        print(tab)
+       
     else:
         tab[x][y] = "O"
         turn=0
