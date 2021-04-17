@@ -181,7 +181,7 @@ def checker(c):
         print()
         print("O won.")
         virtual_board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-        score_o = 1
+        score_o += 1
         frame_middle_label_right["text"] = "O : {}".format(score_o)
         for i in range(len(button_storage)):
             for j in range(len(button_storage[i])):
@@ -192,7 +192,7 @@ def checker(c):
         print()
         print("X won.")
         virtual_board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-        score_x = 1
+        score_x += 1
         frame_middle_label_left["text"] = "X : {}".format(score_x)
         for i in range(len(button_storage)):
             for j in range(len(button_storage[i])):
@@ -235,20 +235,26 @@ def verification_win(board, winner):
 def click(x, y):
     global turn
     if turn == 0:
-        virtual_board[x][y] = "X"
-        turn = 1
+        if virtual_board[x][y]:
+            pass
+        else:
+            virtual_board[x][y] = "X"
+            turn = 1
 
-        button_storage[0][x][y]["text"] = "X"
-        button_storage[0][x][y]["fg"] = "white"
-        verification_win(virtual_board, turn)
+            button_storage[0][x][y]["text"] = "X"
+            button_storage[0][x][y]["fg"] = "white"
+            verification_win(virtual_board, turn)
 
     else:
-        virtual_board[x][y] = "O"
-        turn = 0
+        if virtual_board[x][y]:
+            pass
+        else:
+            virtual_board[x][y] = "O"
+            turn = 0
 
-        button_storage[0][x][y]["text"] = "O"
-        button_storage[0][x][y]["fg"] = "white"
-        verification_win(virtual_board, turn)
+            button_storage[0][x][y]["text"] = "O"
+            button_storage[0][x][y]["fg"] = "white"
+            verification_win(virtual_board, turn)
 
 
 button_easter.bind(
