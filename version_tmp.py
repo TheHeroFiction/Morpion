@@ -163,30 +163,29 @@ separator = Frame(frame_top, bg="white", width="450px", height="5px") # On crée
 separator.pack(pady=25) # On le place et le sépare de la même façon que le frame_top_title
 
 
-frame_middle = Frame(window, bg="#6E83DD", width=650, height=50)
-frame_middle_label_left = Label(frame_middle, text="X : 0", fg="white", font="Helvetica 15 bold",bg=main_color)
-frame_middle_label_left.place(anchor="e", relx=.1, rely=.5)
-frame_middle_label_center = Label(frame_middle, text="test", fg="white", font="Helvetica 15 bold", bg=main_color)
-frame_middle_label_center.place(anchor="c", relx=.5, rely=.5)          
-frame_middle_label_right = Label(frame_middle, text="O : 0", fg="white", font="Helvetica 15 bold", bg=main_color)
-frame_middle_label_right.place(anchor="w", relx=.9, rely=.5)
-frame_middle.pack(pady=50)
-frame_bottom = Frame(window, bg=main_color)
-frame_bottom.pack(side=BOTTOM, fill="x")
+frame_middle = Frame(window, bg="#6E83DD", width=650, height=50) # On crée le Frame du milieu qui contiendra lesscores ainsi que celui qui a gagné
+frame_middle_label_left = Label(frame_middle, text="X : 0", fg="white", font="Helvetica 15 bold",bg=main_color) # Score de X
+frame_middle_label_left.place(anchor="e", relx=.1, rely=.5) # Pmacement du score de X a gauche 
+frame_middle_label_center = Label(frame_middle, text="test", fg="white", font="Helvetica 15 bold", bg=main_color) # Vainqueur
+frame_middle_label_center.place(anchor="c", relx=.5, rely=.5) # Placement de la personne qui a gagné au centre
+frame_middle_label_right = Label(frame_middle, text="O : 0", fg="white", font="Helvetica 15 bold", bg=main_color) # Score de O
+frame_middle_label_right.place(anchor="w", relx=.9, rely=.5) # Placement du score de O a droite 
+frame_middle.pack(pady=50) # On affiche la Frame du milieu
+frame_bottom = Frame(window, bg=main_color) # On crée la Framedu bas qui contiendra le menu ainsi que la grille du morpion
+frame_bottom.pack(side=BOTTOM, fill="x") # La frame prend toute la largeur disponible
 
-table = Frame(window, bg="#F37552", relief=SUNKEN, borderwidth=10)
+table = Frame(window, bg="#F37552", relief=SUNKEN, borderwidth=10) # Grille du morpion
 
+# On peut faire varier la longueur et largeur du boutton ainsi que sa couleur
 width_button = 5
 height_button = 5
 color_button = "#2E2E2E"
 
+virtual_board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]] # Tableau de jeu virtuel pour faire les vérifications en back 
 
+button_storage = [] # Pour stocker les bouttons afn de boucler dessus pour les modifier un a un
 
-
-virtual_board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-
-button_storage = []
-
+# Création des bouttons
 (
     button_1,
     button_2,
@@ -212,19 +211,19 @@ button_storage = []
         frame_bottom, width=1, height=1, bg=color_button, highlightthickness=0, bd=0
     ),
 )
-
+# Placement des bouttons dans la frame "table"
 button_1.grid(row=0, column=0)
 button_2.grid(row=0, column=1)
 button_3.grid(row=0, column=2)
-button_4.grid(row=1, column=0, pady=5)
+button_4.grid(row=1, column=0, pady=5) # Pour le quadrillage
 button_5.grid(row=1, column=1)
 button_6.grid(row=1, column=2)
 button_7.grid(row=2, column=0)
-button_8.grid(row=2, column=1, padx=5)
+button_8.grid(row=2, column=1, padx=5) # Pour le quadrillage
 button_9.grid(row=2, column=2)
 
-button_menu = Button(window, text="Menu", command=new_window)
-button_menu.place(anchor="e", relx=.9, rely=.9)
+button_menu = Button(window, text="Menu", command=new_window) # Le boutton du menu
+button_menu.place(anchor="e", relx=.9, rely=.9) # Placer en bas a droite de l'écran
 
 button_storage.append(
     [
@@ -232,21 +231,21 @@ button_storage.append(
         [button_4, button_5, button_6],
         [button_7, button_8, button_9],
     ]
-)
+) # On rempli le tableau avec l'ensemble des bouttons crée
 
 button_easter.bind(
     "<Button-1>",
     func=lambda rien: messagebox.showinfo(
         "Easter Egg", "Vous avez trouvé le boutton caché o_O"
     ),
-)
+) # Boutton easter egg qui est en bas a gauche de l'écran (action lors du clique)
 button_easter.bind(
     "<Enter>", func=lambda rien: button_easter.config(activebackground=main_color)
-)
+) # Pour remettre la couleur de base a l'entrée et a la sortie pour le garder caché
 
 
-table.pack(expand=1)
+table.pack(expand=1) # On affiche le tableau de jeu
 
 # Shower
 
-window.mainloop()
+window.mainloop() # On affiche la fenêtre (instancie en l'occurence).
