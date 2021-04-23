@@ -148,8 +148,11 @@ def click(x, y):  # Fonction qui gère le clique en prennant 2 paramètres X et 
     else:  # Sinon (si c'est le tour de O)
         poser("O", x, y)  # On appelle la fonction poser et on lui passe les arguments O car c'est le tour du joueur 2, ainsi que les coordonnées du boutton pressé
 
+import threading
+
 def timer(): #Fonction qui génère un timer
     global secondes, minutes, heures
+
     secondes += 1
     if secondes == 60:
         secondes = 0
@@ -157,9 +160,14 @@ def timer(): #Fonction qui génère un timer
     if minutes == 60:
         minutes = 0
         heures += 1
-    time_spent.configure(heures,":",minutes,":",secondes)    
+    
+    time_spent["text"] = heures,":",minutes,":",secondes
+    
+    t = threading.Timer(1,timer)
+    t.start()       
 
-
+    
+    
 
 # Body
 
@@ -179,7 +187,7 @@ time_frame = Frame(window, height=50, width=300)
 time_spent = Label(time_frame,text= "00:00:00")
 time_spent.pack()
 time_frame.pack(side= TOP)
-
+timer()
 frame_top_title.pack(pady=25)  # On place ce titre avec un espacement par rapport au haut pour éviter qu'il soit coller
 
 separator = Frame(frame_top, bg="white", width="450px",height="5px")  # On crée un sort de hr en html, un séprateur qui permet de séparé le bloc du haut du bloc du milieu
