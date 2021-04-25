@@ -11,6 +11,7 @@ from tkinter import *  # On importe le module tkinter avec tout ses composants
 
 import random  # On importe le module random qui nous permet de rendre aléatoire le début de chaque partie
 import time
+import webbrowser
 
 # Init
 
@@ -20,17 +21,16 @@ version = "1.0.0"  # La version du jeu
 
 window.configure(bg=main_color)  # On set le fond d'écran du jeu à la couleur principale de notrejeu
 window.title("Morpion {}".format(version))  # On affiche le nom du jeu ainsi que sa version dans l'onglet de la fenêtre
-w, h = window.winfo_screenwidth(), window.winfo_screenheight()  # On accède aux informations suivantes : La largeur et longueur maximale supportépar l'écran de l'utilisateur
-window.geometry("{}x{}".format(w,h))  # On veut que notre jeu ne soit accessible qu'en plein écran, donc on setsa taille de base à la taille maximale
-
+w, h = window.winfo_screenwidth(), window.winfo_screenheight()  # On accède aux informations suivantes : La largeur et longueur maximale supporté par l'écran de l'utilisateur
+window.attributes("-fullscreen", True) # Permet d'activer le mode plein écran
 secondes = 0 #variable qui  servira à mesurer les secondes
 minutes = 0 #variable qui  servira à mesurer les minutes
 heures = 0 #variable qui  servira à mesurer les heures
+
 #Image
+
 engrenage = PhotoImage(file="engrenage.gif")
 
-
-# window.minsize(w,h) # Si l'utilisateur veut que la taille de la fenêtre soit bloqué sur lemode plein écran. Problème : Cache un peu le bouton MENU
 # Functions
 
 def btn_maker(x, y):  # Cette fonction permet de rendre la création de la grille de bouton plus compact
@@ -46,12 +46,23 @@ def btn_maker(x, y):  # Cette fonction permet de rendre la création de la grill
 
 mode = 0  # Variable qui permet de rendre le bouton menu multitache, il ferme et ouvre le menu
 
-
+def end_menu():
+    global mode, menu 
+    menu.destroy()
+    mode=0
 def new_window():  # Fonction qui permet de créer ce nouveau menu et de le supprimer selon le mode
-    global mode, menu  # Importation de nos 2 variables clés
+    global mode, menu,w,h  # Importation de nos 2 variables clés
     if mode == 0:  # Si la Frame n'est pas présente sur la page
-        menu = Frame(window, width=500, height=500, bg="white",borderwidth=10)  # On crée la Frame qui est un carré 500x500
+        menu = Frame(window, width=w, height=h, bg="white",borderwidth=5, relief=SUNKEN)  # On crée la Frame qui est un carré 500x500
         menu.place(relx=.25, rely=.25)  # On le place au centre de l'écran
+        menu_button_quit_menu = Button(menu, text="X", width=10, command=end_menu)
+        menu_button_quit_menu.pack(side=RIGHT)
+        menu_button_quit = Button(menu, text="Quitter le jeu",width=50, command=window.destroy) # Boutton pour quitter le jeu
+        menu_button_quit.pack()
+        menu_button_reset = Button(menu, text="Reset", width=50, command=lambda: winner("Reset")) # Boutton pour reset le tableau de jeu
+        menu_button_reset.pack()
+        menu_button_github = Button(menu, text="GitHub", width=50,command=lambda: webbrowser.open("https://github.com/TheHeroFiction/Morpion")) # Boutton pour accéder au code source du jeu
+        menu_button_github.pack()
         mode = 1  # On déclare que la Frame est présente sur la page
     else:  # Si la Frame est présente sur la page
         menu.destroy()  # On la supprime
@@ -73,11 +84,15 @@ def reset():  # Partie assez redondante du code, qui a donc été transformé en
 
 def winner(sign):  # Fonction qui incrémente les points, les affiche, actualise les 2 tableaux de jeu
     global score_o, score_x, virtual_board, i  # Importation des variables clés
-    frame_middle_label_center["text"] = "{} a gagné.".format(sign)  # On affiche qui a gagné
+    if sign == "Reset":
+        frame_middle_label_center["text"] = "Partie réinitialisée"
+    else:
+        frame_middle_label_center["text"] = "{} a gagné.".format(sign)  # On affiche qui a gagné
     virtual_board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]  # On actualise le tableau de jeu virtuelk
     if sign == "O":  # Si c'est le joueur 2 qui a gagné
         score_o += 1  # On incrémente le score de O
         frame_middle_label_right["text"] = "O : {}".format(score_o)  # On affiche ses points
+    
     else:
         score_x += 1  # On incrémente le score de X
         frame_middle_label_left["text"] = "X : {}".format(score_x)  # On incrémente ses points
@@ -103,9 +118,8 @@ def checker(
 def verification_win(board, winner_sign):  # Fonction qui vérifie si un joueur a gagné
     global i
     # Vérification du match nul
-    if i == 9:  # 9 cases remplis
-        checker("None")
-    elif board[0][0] == board[1][1] == board[2][2] != 0:  # Diagonale partant de en haut a gauche à en bas a droite
+    
+    if board[0][0] == board[1][1] == board[2][2] != 0:  # Diagonale partant de en haut a gauche à en bas a droite
         checker(winner_sign)
     elif board[2][0] == board[1][1] == board[0][2] != 0:  # Diagonale partant de en bas a gauche a en haut a droite
         checker(winner_sign)
@@ -121,6 +135,8 @@ def verification_win(board, winner_sign):  # Fonction qui vérifie si un joueur 
         checker(winner_sign)
     elif board[0][2] == board[1][2] == board[2][2] != 0:  # Colonne de droite
         checker(winner_sign)
+    elif i == 9:  # 9 cases remplis
+        checker("None")
 
 turn = random.randint(0, 1)  # On choisit ici qui sera le premier a jouer
 
@@ -163,10 +179,21 @@ def timer(): #Fonction qui génère un timer
     
     time_spent["text"] = heures,":",minutes,":",secondes
     
-    t = threading.Timer(1,timer)
-    t.start()       
+    t = threading.Timer(1,timer) # Pour itéré l'opération chaque secondes
+    t.setDaemon(True) # Pour enlever l'erreur RunTime Error (source : https://stackoverflow.com/questions/14694408/runtimeerror-main-thread-is-not-in-main-loop)
+    t.start() # On commence le thread
 
     
+
+def easter_appear(): # Fonction pour faire apparaître la fenêtre de l'easter egg
+    win_easter = Tk() # Instanciation de la fenêtre
+    global w,h # On importe les longueurs et largeurs maximales
+    win_easter.geometry("{}x{}".format(w,h)) # On les set a cette nouvelle fenêtre
+    win_easter.configure(bg="black") # Fond noir
+    win_easter.title("Easter Egg") # Titre de la fenêtre
+    lbl = Label(win_easter, text="Vous avez trouvé le boutton caché.", fg="white", font="Helvetica 35 bold", bg="black") # Le texte de l'easter egg
+    lbl.place(anchor="c", relx=.5, rely=.5) # Placer au centre de la page
+    win_easter.mainloop() # Affichage de la fenêtre
     
 
 # Body
@@ -183,11 +210,7 @@ frame_top_title = Label(
     bg=main_color,
 )  # On crée un titre qui sera le titre de notre jeu "Morpion" on le place au center
 
-time_frame = Frame(window, height=50, width=300)
-time_spent = Label(time_frame,text= "00:00:00")
-time_spent.pack()
-time_frame.pack(side= TOP)
-timer()
+
 frame_top_title.pack(pady=25)  # On place ce titre avec un espacement par rapport au haut pour éviter qu'il soit coller
 
 separator = Frame(frame_top, bg="white", width="450px",height="5px")  # On crée un sort de hr en html, un séprateur qui permet de séparé le bloc du haut du bloc du milieu
@@ -208,8 +231,8 @@ table = Frame(window, bg="#F37552", relief=SUNKEN, borderwidth=10,height=600, wi
 
 
 # On peut faire varier la longueur et largeur du boutton ainsi que sa couleur
-width_button = 15
-height_button = 10
+width_button = 12
+height_button = 6
 color_button = "#2E2E2E"
 
 virtual_board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]  # Tableau de jeu virtuel pour faire les vérifications en back
@@ -239,7 +262,7 @@ button_storage = []  # Pour stocker les bouttons afn de boucler dessus pour les 
     btn_maker(2, 1),
     btn_maker(2, 2),
     Button(
-        frame_bottom, width=1, height=1, bg=color_button, highlightthickness=0, bd=0
+        frame_bottom, width=1, height=1, bg=main_color, highlightthickness=0, bd=0
     ),
 )
 # Placement des bouttons dans la frame "table"
@@ -252,6 +275,7 @@ button_6.grid(row=1, column=2)
 button_7.grid(row=2, column=0)
 button_8.grid(row=2, column=1, padx=5)  # Pour le quadrillage
 button_9.grid(row=2, column=2)
+button_easter.pack() # Boutton easter egg situé en bas de l'interface
 
 button_menu = Button(window,  image=engrenage, command=new_window, borderwidth=0)  # Le boutton du menu
 button_menu.place(anchor="e", relx=.9, rely=.9)  # Placer en bas a droite de l'écran
@@ -264,18 +288,21 @@ button_storage.append(
     ]
 )  # On rempli le tableau avec l'ensemble des bouttons crée
 
-button_easter.bind(
-    "<Button-1>",
-    func=lambda rien: messagebox.showinfo(
-        "Easter Egg", "Vous avez trouvé le boutton caché o_O"
-    ),
-)  # Boutton easter egg qui est en bas a gauche de l'écran (action lors du clique)
+
+button_easter.bind("<Button-1>",func=lambda rien: easter_appear()) # Boutton easter egg qui est en bas a gauche de l'écran (action lors du clique)
+
 button_easter.bind(
     "<Enter>", func=lambda rien: button_easter.config(activebackground=main_color)
-)  # Pour remettre la couleur de base a l'entrée et a la sortie pour le garder caché
+) # Pour remettre la couleur de base a l'entrée et a la sortie pour le garder caché
 
-table.pack()  # On affiche le tableau de jeu
+
+time_spent = Label(frame_bottom,text= "00:00:00", fg="white", font="Verdana 45 bold", bg=main_color) # Timer
+time_spent.pack() # Affichage du timer
+
+timer() # Appel de la fonction qui invoque le timer
+
+table.pack(expand=1)  # On affiche le tableau de jeu
 
 # Shower
 
-window.mainloop()  # On affiche la fenêtre (instancie en l'occurence).
+window.mainloop()  # On affiche la fenêtre
