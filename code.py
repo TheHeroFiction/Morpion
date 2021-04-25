@@ -93,7 +93,7 @@ def winner(sign):  # Fonction qui incrémente les points, les affiche, actualise
         score_o += 1  # On incrémente le score de O
         frame_middle_label_right["text"] = "O : {}".format(score_o)  # On affiche ses points
     
-    else:
+    elif sign == "X":
         score_x += 1  # On incrémente le score de X
         frame_middle_label_left["text"] = "X : {}".format(score_x)  # On incrémente ses points
     reset()  # On clear le tableau de jeu
