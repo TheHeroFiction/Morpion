@@ -53,15 +53,15 @@ def end_menu():
 def new_window():  # Fonction qui permet de créer ce nouveau menu et de le supprimer selon le mode
     global mode, menu,w,h  # Importation de nos 2 variables clés
     if mode == 0:  # Si la Frame n'est pas présente sur la page
-        menu = Frame(window, width=w, height=h, bg="white",borderwidth=5, relief=SUNKEN)  # On crée la Frame qui est un carré 500x500
-        menu.place(relx=.25, rely=.25)  # On le place au centre de l'écran
-        menu_button_quit_menu = Button(menu, text="X", width=10, command=end_menu)
+        menu = Frame(window, width=w, height=h, bg="#66A789",borderwidth=5, relief=SUNKEN)  # On crée la Frame qui est un carré 500x500
+        menu.place(relx=.5, rely=.5, anchor="c") # On le place au centre de l'écran
+        menu_button_quit_menu = Button(menu, text="X", width=10, command=end_menu,bg="#A77E66", fg="white", font="Helvetica 15 underline")
         menu_button_quit_menu.pack(side=RIGHT)
-        menu_button_quit = Button(menu, text="Quitter le jeu",width=50, command=window.destroy) # Boutton pour quitter le jeu
+        menu_button_quit = Button(menu, text="Quitter le jeu",width=50, command=window.destroy,bg="#A77E66", fg="white", font="Helvetica 15 underline") # Boutton pour quitter le jeu
         menu_button_quit.pack()
-        menu_button_reset = Button(menu, text="Reset", width=50, command=lambda: winner("Reset")) # Boutton pour reset le tableau de jeu
+        menu_button_reset = Button(menu, text="Reset", width=50, command=lambda: winner("Reset"),bg="#A77E66", fg="white", font="Helvetica 15 underline") # Boutton pour reset le tableau de jeu
         menu_button_reset.pack()
-        menu_button_github = Button(menu, text="GitHub", width=50,command=lambda: webbrowser.open("https://github.com/TheHeroFiction/Morpion")) # Boutton pour accéder au code source du jeu
+        menu_button_github = Button(menu, text="GitHub", width=50,command=lambda: webbrowser.open("https://github.com/TheHeroFiction/Morpion"),bg="#A77E66", fg="white", font="Helvetica 15 underline") # Boutton pour accéder au code source du jeu
         menu_button_github.pack()
         mode = 1  # On déclare que la Frame est présente sur la page
     else:  # Si la Frame est présente sur la page
