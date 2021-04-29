@@ -10,7 +10,7 @@
 
 <h2>Comment l'utiliser ?</h2>
 
-<p>Il vous suffit de clone la repository avec la commande : `git clone [repo url]` et de lancer le programme principal `morpion_tkinter.py`. On vous demandera de rentrer deux noms de joueurs, et la partie pourra donc commencer.</p>
+<p>Il vous suffit de clone la repository avec la commande : `git clone [repo url]` et de lancer le programme principal `morpion_tkinter.py`. La partie commùence dès l'entrée dans l'interface graphique.</p>
 
 <br />
 
