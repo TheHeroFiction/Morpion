@@ -10,7 +10,7 @@
 
 <h2>Comment l'utiliser ?</h2>
 
-<p>Il vous suffit de clone la repository avec la commande : `git clone [repo url]` et de lancer le programme principal `morpion_tkinter.py`. La partie commence dès l'entrée dans l'interface graphique.</p>
+<p>Il vous suffit de clone la repository avec la commande : <code>git clone [repo url]</code> et de lancer le programme principal <code>morpion_tkinter.py</code>. La partie commence dès l'entrée dans l'interface graphique.</p>
 
 <br />
 
