@@ -10,26 +10,29 @@ Tous droits réservés
 from tkinter import *  # On importe le module tkinter avec tout ses composants
 
 import random  # On importe le module random qui nous permet de rendre aléatoire le début de chaque partie
-import time
-import webbrowser
-
+import webbrowser # On l'importe pour pouvoir ouvrir des liens externes
+import json # On l'importe pour pouvoir extraire le contenu du fichier config.json
+import threading # On l'importe pour pouvoir changer le timer a chaques secondes
 # Init
 
 window = Tk()  # On instancie une nouvelle fenêtre GUI de tkinter
-main_color = "#0B243B"  # Ceci est notre couleur principale du jeu
-version = "1.0.0"  # La version du jeu
+infos = open("config.json", "r") # On lit le fichier config.json
+infos = json.load(infos) # On extrait son contenu
+
+main_color = infos["main_color"]  # Ceci est notre couleur principale du jeu
+version = infos["version"]  # La version du jeu
 
 window.configure(bg=main_color)  # On set le fond d'écran du jeu à la couleur principale de notrejeu
-window.title("Morpion {}".format(version))  # On affiche le nom du jeu ainsi que sa version dans l'onglet de la fenêtre
+window.title("{} {}".format(infos["title"], infos["version"]))  # On affiche le nom du jeu ainsi que sa version dans l'onglet de la fenêtre
 w, h = window.winfo_screenwidth(), window.winfo_screenheight()  # On accède aux informations suivantes : La largeur et longueur maximale supporté par l'écran de l'utilisateur
 window.attributes("-fullscreen", True) # Permet d'activer le mode plein écran
 secondes = 0 #variable qui  servira à mesurer les secondes
 minutes = 0 #variable qui  servira à mesurer les minutes
 heures = 0 #variable qui  servira à mesurer les heures
 
-#Image
+# Image
 
-engrenage = PhotoImage(file="engrenage.gif")
+engrenage = PhotoImage(file="engrenage.gif") # Notre image engrenage.gif
 
 # Functions
 
@@ -48,25 +51,25 @@ mode = 0  # Variable qui permet de rendre le bouton menu multitache, il ferme et
 
 def end_menu():
     global mode, menu 
-    menu.destroy()
-    mode=0
+    menu.destroy() # On supprime le menu de la fenêtre principale
+    mode=0 # On déclare que la Frame n'est plus présente sur la page
 def new_window():  # Fonction qui permet de créer ce nouveau menu et de le supprimer selon le mode
     global mode, menu,w,h  # Importation de nos 2 variables clés
     if mode == 0:  # Si la Frame n'est pas présente sur la page
         menu = Frame(window, width=w, height=h, bg="#66A789",borderwidth=5, relief=SUNKEN)  # On crée la Frame qui est un carré 500x500
         menu.place(relx=.5, rely=.5, anchor="c") # On le place au centre de l'écran
-        menu_button_quit_menu = Button(menu, text="X", width=10, command=end_menu,bg="#A77E66", fg="white", font="Helvetica 15 underline")
+        menu_button_quit_menu = Button(menu, text="X", width=10, command=end_menu,bg="#A77E66", fg="white", font="{} 15 underline".format(infos["fonts"][1]))
         menu_button_quit_menu.pack(side=RIGHT)
-        menu_button_quit = Button(menu, text="Quitter le jeu",width=50, command=window.destroy,bg="#A77E66", fg="white", font="Helvetica 15 underline") # Boutton pour quitter le jeu
+        menu_button_quit = Button(menu, text="Quitter le jeu",width=50, command=window.destroy,bg="#A77E66", fg="white", font="{} 15 underline".format(infos["fonts"][1])) # Boutton pour quitter le jeu
         menu_button_quit.pack()
-        menu_button_reset = Button(menu, text="Reset", width=50, command=lambda: winner("Reset"),bg="#A77E66", fg="white", font="Helvetica 15 underline") # Boutton pour reset le tableau de jeu
+        menu_button_reset = Button(menu, text="Reset", width=50, command=lambda: winner("Reset"),bg="#A77E66", fg="white", font="{} 15 underline".format(infos["fonts"][1])) # Boutton pour reset le tableau de jeu
         menu_button_reset.pack()
-        menu_button_github = Button(menu, text="GitHub", width=50,command=lambda: webbrowser.open("https://github.com/TheHeroFiction/Morpion"),bg="#A77E66", fg="white", font="Helvetica 15 underline") # Boutton pour accéder au code source du jeu
+        menu_button_github = Button(menu, text="GitHub", width=50,command=lambda: webbrowser.open("https://github.com/TheHeroFiction/Morpion"),bg="#A77E66", fg="white", font="{} 15 underline".format(infos["fonts"][1])) # Boutton pour accéder au code source du jeu
         menu_button_github.pack()
         mode = 1  # On déclare que la Frame est présente sur la page
     else:  # Si la Frame est présente sur la page
         menu.destroy()  # On la supprime
-        mode = 0  # On déclare que la Framen'est plus présente sur la page
+        mode = 0  # On déclare que la Frame n'est plus présente sur la page
 
 
 score_o = 0  # Le score du joueur 2
@@ -164,7 +167,7 @@ def click(x, y):  # Fonction qui gère le clique en prennant 2 paramètres X et 
     else:  # Sinon (si c'est le tour de O)
         poser("O", x, y)  # On appelle la fonction poser et on lui passe les arguments O car c'est le tour du joueur 2, ainsi que les coordonnées du boutton pressé
 
-import threading
+
 
 def timer(): #Fonction qui génère un timer
     global secondes, minutes, heures
@@ -191,7 +194,7 @@ def easter_appear(): # Fonction pour faire apparaître la fenêtre de l'easter e
     win_easter.geometry("{}x{}".format(w,h)) # On les set a cette nouvelle fenêtre
     win_easter.configure(bg="black") # Fond noir
     win_easter.title("Easter Egg") # Titre de la fenêtre
-    lbl = Label(win_easter, text="Vous avez trouvé le boutton caché.", fg="white", font="Helvetica 35 bold", bg="black") # Le texte de l'easter egg
+    lbl = Label(win_easter, text="Vous avez trouvé le boutton caché.", fg="white", font="{} 35 bold".format(infos["fonts"][1]), bg="black") # Le texte de l'easter egg
     lbl.place(anchor="c", relx=.5, rely=.5) # Placer au centre de la page
     win_easter.mainloop() # Affichage de la fenêtre
     
@@ -217,11 +220,11 @@ separator = Frame(frame_top, bg="white", width="450px",height="5px")  # On crée
 separator.pack(pady=25)  # On le place et le sépare de la même façon que le frame_top_title
 
 frame_middle = Frame(window, bg="#6E83DD", width=650,height=50)  # On crée le Frame du milieu qui contiendra lesscores ainsi que celui qui a gagné
-frame_middle_label_left = Label(frame_middle, text="X : 0", fg="white", font="Helvetica 15 bold",bg=main_color)  # Score de X
+frame_middle_label_left = Label(frame_middle, text="X : 0", fg="white", font="{} 15 bold".format(infos["fonts"][1]),bg=main_color)  # Score de X
 frame_middle_label_left.place(anchor="e", relx=.1, rely=.5)  # Pmacement du score de X a gauche
-frame_middle_label_center = Label(frame_middle, text="test", fg="white", font="Helvetica 15 bold",bg=main_color)  # Vainqueur
+frame_middle_label_center = Label(frame_middle, text="test", fg="white", font="{} 15 bold".format(infos["fonts"][1]),bg=main_color)  # Vainqueur
 frame_middle_label_center.place(anchor="c", relx=.5, rely=.5)  # Placement de la personne qui a gagné au centre
-frame_middle_label_right = Label(frame_middle, text="O : 0", fg="white", font="Helvetica 15 bold",bg=main_color)  # Score de O
+frame_middle_label_right = Label(frame_middle, text="O : 0", fg="white", font="{} 15 bold".format(infos["fonts"][1]),bg=main_color)  # Score de O
 frame_middle_label_right.place(anchor="w", relx=.9, rely=.5)  # Placement du score de O a droite
 frame_middle.pack(pady=50)  # On affiche la Frame du milieu
 frame_bottom = Frame(window,bg=main_color)  # On crée la Framedu bas qui contiendra le menu ainsi que la grille du morpion
@@ -231,9 +234,9 @@ table = Frame(window, bg="#F37552", relief=SUNKEN, borderwidth=10,height=600, wi
 
 
 # On peut faire varier la longueur et largeur du boutton ainsi que sa couleur
-width_button = 12
-height_button = 6
-color_button = "#2E2E2E"
+width_button = infos["width_button"]
+height_button = infos["height_button"]
+color_button = infos["color_button"]
 
 virtual_board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]  # Tableau de jeu virtuel pour faire les vérifications en back
 
@@ -296,7 +299,7 @@ button_easter.bind(
 ) # Pour remettre la couleur de base a l'entrée et a la sortie pour le garder caché
 
 
-time_spent = Label(frame_bottom,text= "00:00:00", fg="white", font="Verdana 45 bold", bg=main_color) # Timer
+time_spent = Label(frame_bottom,text= "00:00:00", fg="white", font="{} 45 bold".format(infos["fonts"][0]), bg=main_color) # Timer
 time_spent.pack() # Affichage du timer
 
 timer() # Appel de la fonction qui invoque le timer
